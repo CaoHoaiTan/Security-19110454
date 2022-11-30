@@ -34,15 +34,15 @@ passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
 // Save the session to the cookie
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
 // Read the session from the cookie
-passport.deserializeUser((id, done) => {
+passport.deserializeUser((user, done) => {
   // User.findById(id).then(user => {
   //   done(null, user);
   // });
-  done(null, id);
+  done(null, user);
 });
 
 const app = express();
@@ -91,7 +91,7 @@ app.get('/auth/logout', (req, res) => {
 });
 
 app.get('/secret', checkLoggedIn, (req, res) => {
-  return res.json(req.user);
+  return res.send(`Welcome ${req.user.emails[0].value}!`);
 });
 
 app.get('/failure', (req, res) => {
